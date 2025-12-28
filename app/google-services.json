@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "288690876218",
+    "project_id": "foodent-d71eb",
+    "storage_bucket": "foodent-d71eb.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:288690876218:android:608c6e919ac13666da2a03",
+        "android_client_info": {
+          "package_name": "com.example.foodentapplication"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDNPPcAPg0tAW3nYTZQ_BJLeLrQjeX7YLQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
