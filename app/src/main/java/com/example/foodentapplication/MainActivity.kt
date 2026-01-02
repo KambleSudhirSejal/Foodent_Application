@@ -12,8 +12,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.navigation.compose.rememberNavController
-import com.example.foodentapplication.presentation.navigation.App
+
+import com.example.foodentapplication.presentation.screens.SelectRoleScreen
 import com.example.foodentapplication.ui.theme.FoodentApplicationTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -58,11 +58,14 @@ class MainActivity : ComponentActivity() {
 
 
             FoodentApplicationTheme {
-                App(
+//                App(
+//
+//                    isVisible = isVisible,
+//                    listState= listState
+//                )
 
-                    isVisible = isVisible,
-                    listState= listState
-                )
+
+                SelectRoleScreen()
 
 
             }

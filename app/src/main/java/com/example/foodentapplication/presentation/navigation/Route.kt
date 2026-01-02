@@ -11,11 +11,58 @@ sealed class SubNavigation {
     @Serializable
     object MainHomeScreen: SubNavigation()
 
+    @Serializable
+    object UserMainHomeScreen: SubNavigation()
+
+    @Serializable
+    object AdminMainHomeScreen: SubNavigation()
+
 
 
 }
 
 sealed class Route{
+
+    @Serializable
+    object SelectRoleScreen : Route()
+
+    @Serializable
+    object UserLoginScreen : Route()
+
+    @Serializable
+    object UserSignUpScreen : Route()
+
+    @Serializable
+    object UserCartScreen : Route()
+
+    @Serializable
+    object UserProfileScreen : Route()
+
+
+    @Serializable
+    object UserHomeScreen : Route()
+
+    @Serializable
+    object AdminAddItemScreen : Route()
+
+    @Serializable
+    object AdminMenuScreen : Route()
+
+    @Serializable
+    object AdminLoginScreen : Route()
+
+
+
+    @Serializable
+    object AdminProfileScreen : Route()
+
+    @Serializable
+    object AdminOrderScreen : Route()
+
+
+
+
+
 
     @Serializable
     object LoginScreen : Route()

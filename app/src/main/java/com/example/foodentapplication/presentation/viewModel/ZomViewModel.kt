@@ -44,6 +44,7 @@ class ZomViewModel @Inject constructor(
                     }
 
                     is ResultState.Success->{
+
                         _signUpScreenState.value=_signUpScreenState.value.copy(
                             isLoading=false,
                             errorMessage=it.data
@@ -58,6 +59,37 @@ class ZomViewModel @Inject constructor(
 
 
     }
+
+    fun loginUser(userData: UserData){
+        viewModelScope.launch {
+            loginUserUseCase.loginUser(userData).collect {
+                when(it){
+                    is ResultState.Error->{
+                        _loginScreenState.value=_loginScreenState.value.copy(
+                            isLoading = false,
+                            errorMessage = it.message
+                        )
+                    }
+                    is ResultState.Loading->{
+
+                        _loginScreenState.value = _loginScreenState.value.copy(
+                            isLoading = true
+                        )
+                    }
+                    is ResultState.Success<*> -> {
+                        _loginScreenState.value=_loginScreenState.value.copy(
+                            isLoading = false,
+                            errorMessage = it.data as String?
+                        )
+                    }
+
+                }
+
+            }
+        }
+    }
+
+
 }
 
 data class SignUpScreenState(

@@ -183,7 +183,7 @@ fun LoginScreen(
                             email=email,
                             password = password
                         )
-                        viewModel.createUser(userData)
+                        viewModel.loginUser(userData)
                     }
                     else{
                         Toast.makeText(context,"Please field all the details",Toast.LENGTH_SHORT).show()
