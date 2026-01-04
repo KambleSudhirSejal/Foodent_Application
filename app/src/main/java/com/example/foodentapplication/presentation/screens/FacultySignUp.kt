@@ -19,7 +19,6 @@ import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.MenuBook
 import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.School
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -48,14 +47,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavHostController
+import androidx.navigation.NavController
 import com.example.foodentapplication.presentation.navigation.Route
 import com.example.foodentapplication.presentation.navigation.route
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun UserSignUpScreen(navController: NavHostController) {
+fun FacultySignUp(navController: NavController) {
 
     var name by remember {mutableStateOf("")}
     var email by remember { mutableStateOf("") }
@@ -63,8 +61,8 @@ fun UserSignUpScreen(navController: NavHostController) {
     var passwordVisible by remember{mutableStateOf(false)}
 
     val buttonGradient = listOf(
-        Color(0xFFCC3608),
-        Color(0xFFF66A3C)
+        Color(0xFF4CAF50),
+        Color(0xFF87DC25)
     )
 
     Scaffold(
@@ -73,7 +71,7 @@ fun UserSignUpScreen(navController: NavHostController) {
                 title = {
                     Column {
                         Text(
-                            text = "Student Portal",
+                            text = "Faculty Portal",
                             fontSize = 20.sp,
                             fontWeight = FontWeight.Bold
                         )
@@ -121,7 +119,7 @@ fun UserSignUpScreen(navController: NavHostController) {
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
-                        imageVector = Icons.Default.School,
+                        imageVector = Icons.Default.MenuBook,
                         contentDescription = null,
                         tint = Color.White,
                         modifier = Modifier.size(42.dp)
@@ -260,13 +258,13 @@ fun UserSignUpScreen(navController: NavHostController) {
 
                         )
                     Text(
-                        text = " Login here",
+                        text = " Login  here",
                         color = MaterialTheme.colorScheme.onSurface,
                         fontWeight = FontWeight.Bold,
                         fontSize = 16.sp,
                         textDecoration = TextDecoration.Underline,
                         modifier=Modifier.clickable{
-                            navController.navigate(Route.UserLoginScreen.route())
+                            navController.navigate(Route.FacultyLogin.route())
                         }
 
                     )

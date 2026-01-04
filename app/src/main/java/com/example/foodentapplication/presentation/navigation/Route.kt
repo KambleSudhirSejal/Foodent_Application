@@ -90,5 +90,13 @@ sealed class Route{
     object FinalCheckOutScreen:Route()
 
     @Serializable
+    object FacultyLogin:Route()
+
+    @Serializable
+    object FacultySignUp:Route()
+
+    @Serializable
     object SearchBarScreen:Route()
+
+
 }

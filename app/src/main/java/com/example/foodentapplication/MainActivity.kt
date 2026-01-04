@@ -12,6 +12,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import com.example.foodentapplication.presentation.navigation.App
 
 import com.example.foodentapplication.presentation.screens.SelectRoleScreen
 import com.example.foodentapplication.ui.theme.FoodentApplicationTheme
@@ -58,14 +59,10 @@ class MainActivity : ComponentActivity() {
 
 
             FoodentApplicationTheme {
-//                App(
-//
-//                    isVisible = isVisible,
-//                    listState= listState
-//                )
+                App()
 
 
-                SelectRoleScreen()
+
 
 
             }
