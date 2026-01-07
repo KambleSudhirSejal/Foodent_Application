@@ -1,14 +1,16 @@
 package com.example.foodentapplication.presentation.components
 
+//noinspection UsingMaterialAndMaterial3Libraries
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.ScrollableTabRow
-import androidx.compose.material.Tab
+
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ScrollableTabRow
+import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRowDefaults
 import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
@@ -61,7 +63,7 @@ fun FoodCategoryTab(
 
     ScrollableTabRow(
         selectedTabIndex = selectedTabIndex,
-        containerColor = Color.White,
+        containerColor = MaterialTheme.colorScheme.background,
         contentColor=Color.Black,
         edgePadding = 8.dp,
         indicator = {tabPosition->
@@ -101,7 +103,7 @@ fun FoodCategoryTab(
                         text=catagory.name,
                         fontSize = 12.sp,
                         fontWeight =if(selectedTabIndex==index) FontWeight.Bold else FontWeight.Normal,
-                        color = if(selectedTabIndex==index)Color.Black else Color.DarkGray
+                        color = if(selectedTabIndex==index) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurfaceVariant
                     )
 
 

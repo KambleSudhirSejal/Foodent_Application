@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Help
 import androidx.compose.material.icons.filled.Lock
@@ -22,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.foodentapplication.presentation.components.InfoCard
 import com.example.foodentapplication.presentation.components.LogoutButton
 import com.example.foodentapplication.presentation.components.ProfileHeader
@@ -29,14 +29,10 @@ import com.example.foodentapplication.presentation.components.SectionTitle
 import com.example.foodentapplication.presentation.components.SettingsItems
 import com.example.foodentapplication.ui.theme.TextGray
 
-//@Composable
-//fun UserProfileScreen() {
-//
-//
-//}
 
 @Composable
-fun UserProfileScreen() {
+fun FacultyProfileScreen() {
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -45,7 +41,7 @@ fun UserProfileScreen() {
             .verticalScroll(rememberScrollState())
     ) {
 
-        ProfileHeader("User", Color(0xFFFF5722))
+        ProfileHeader("User", Color(0xFF4CAF50))
 
         SectionTitle("ACCOUNT INFORMATION")
 
@@ -54,7 +50,7 @@ fun UserProfileScreen() {
             title = "Email",
             value = "kamblesejal277@gmail.com",
             showArrow = true,
-            Color(0xFFFF5722)
+            Color(0xFF4CAF50)
         )
 
         InfoCard(
@@ -62,7 +58,7 @@ fun UserProfileScreen() {
             title = "Phone",
             value = "Add phone number",
             showArrow = true,
-            Color(0xFFFF5722)
+            Color(0xFF4CAF50)
         )
 
         InfoCard(
@@ -70,7 +66,7 @@ fun UserProfileScreen() {
             title = "Account Type",
             value = "Student",
             showArrow = true,
-            Color(0xFFFF5722)
+            Color(0xFF4CAF50)
         )
 
         SectionTitle("SETTINGS")
@@ -79,7 +75,7 @@ fun UserProfileScreen() {
             icon = Icons.Default.Notifications,
             title = "Notifications",
             subtitle = "Manage your notifications",
-            Color(0xFFFF5722)
+            Color(0xFF4CAF50)
 
         )
 
@@ -87,7 +83,7 @@ fun UserProfileScreen() {
             icon = Icons.Default.Payment,
             title = "Payment Methods",
             subtitle = "Add or remove payment options",
-            Color(0xFFFF5722)
+            Color(0xFF4CAF50)
 
         )
 
@@ -95,7 +91,7 @@ fun UserProfileScreen() {
             icon = Icons.Default.Lock,
             title = "Privacy & Security",
             subtitle = "Manage your account security",
-            Color(0xFFFF5722)
+            Color(0xFF4CAF50)
 
         )
 
@@ -103,7 +99,7 @@ fun UserProfileScreen() {
             icon = Icons.Default.Help,
             title = "Help & Support",
             subtitle = "Get help or contact us",
-            Color(0xFFFF5722)
+            Color(0xFF4CAF50)
 
         )
 
@@ -121,3 +117,4 @@ fun UserProfileScreen() {
         )
     }
 }
+

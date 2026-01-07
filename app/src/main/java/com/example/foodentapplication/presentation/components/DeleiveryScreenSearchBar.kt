@@ -20,6 +20,7 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -58,10 +59,11 @@ fun DeliveryScreenSearchBar(navController: NavController) {
 
     Row(
         modifier = Modifier.fillMaxWidth()
+            .padding(10.dp)
             .height(48.dp)
             .shadow(2.dp,shape= RoundedCornerShape(16.dp))
             .clip(RoundedCornerShape(16.dp))
-            .background(Color.White)
+            .background(MaterialTheme.colorScheme.background)
             .border(1.dp,Color.LightGray,RoundedCornerShape(
                 16.dp
             )).clickable{
@@ -79,7 +81,7 @@ fun DeliveryScreenSearchBar(navController: NavController) {
         Icon(
             Icons.Default.Search,
             contentDescription = "Voice Search ",
-            tint = colorResource(R.color.purple_500),
+            tint = MaterialTheme.colorScheme.onSurface,
             modifier = Modifier.size(24.dp)
 
         )
@@ -103,8 +105,7 @@ fun DeliveryScreenSearchBar(navController: NavController) {
                 if (query.isEmpty()) {
                     Text(
                         "Restaurant name or a dish...",
-                        fontSize = 16.sp,
-                        color = Color.Gray
+                        fontSize = 16.sp
                     )
                 }
                 innerTextField()
@@ -117,7 +118,7 @@ fun DeliveryScreenSearchBar(navController: NavController) {
         Icon(
             painter = painterResource(R.drawable.mic),
             contentDescription = "null",
-            tint = colorResource(R.color.purple_500),
+            tint = MaterialTheme.colorScheme.onSurface,
             modifier = Modifier.size(24.dp)
 
         )

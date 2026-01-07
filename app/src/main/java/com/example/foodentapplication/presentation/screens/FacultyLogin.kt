@@ -216,7 +216,13 @@ fun FacultyLogin(navController: NavController) {
                             .clip(RoundedCornerShape(16.dp))
                             .background(Brush.horizontalGradient(buttonGradient))
                             .clickable {
-                                // TODO: Login logic
+                                navController.navigate(Route.FacultyMainContainer.route()){
+                                    //Remove Login from backStack
+
+                                    popUpTo(Route.FacultyLogin.route()){
+                                        inclusive=true
+                                    }
+                                }
                             },
                         contentAlignment = Alignment.Center
                     ) {

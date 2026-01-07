@@ -18,11 +18,17 @@ import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -32,6 +38,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -50,7 +57,7 @@ fun PreviewHomeScreenCard(){
 
 
 @Composable
-fun HomeScreenCards(navController: NavController) {
+fun     HomeScreenCards(navController: NavController) {
     Card( onClick = {},
         shape = RoundedCornerShape(22.dp),
         elevation = CardDefaults.cardElevation(4.dp),
@@ -109,7 +116,7 @@ fun SmallDetailCard(){
     Card(
         modifier = Modifier.size(width = 122.dp, height = 25.dp),
         colors = CardDefaults.cardColors(
-            containerColor = Color.White
+            containerColor = MaterialTheme.colorScheme.surface
         ),
         shape = RoundedCornerShape(topEnd = 12.dp)
     ){
@@ -129,23 +136,17 @@ fun SmallDetailCard(){
                 modifier = Modifier.padding(start =2.dp,top=2.dp, bottom = 2.dp),
                     fontSize = 11.sp,
                 fontWeight = FontWeight.SemiBold,
-                color=Color.Gray
+                color= MaterialTheme.colorScheme.onSurface
             )
             Icon(
                 painterResource(R.drawable.dot),
                 modifier = Modifier.padding(top=4.dp, )
                     .size(18.dp),
-                tint =Color.Gray,
+                tint = MaterialTheme.colorScheme.onSurface,
                 contentDescription = null
 
             )
-            Text(
-                text=distance.value,
-                modifier = Modifier.padding(top=2.dp, bottom = 2.dp),
-                fontSize = 11.sp,
-                fontWeight = FontWeight.SemiBold,
-                color=Color.Gray
-            )
+
 
         }
 
@@ -156,13 +157,13 @@ fun SmallDetailCard(){
 
 @Composable
 fun DetailCard(){
-    val restaurantName = remember{ mutableStateOf("Haldiram's") }
-    val rating = remember { mutableStateOf("4.2") }
+    val FoodName = remember{ mutableStateOf("Veg Biryani") }
+    val price = remember { mutableStateOf("245 Rs") }
 
     Card(
         modifier = Modifier.fillMaxWidth().height(100.dp),
         colors= CardDefaults.cardColors(
-            containerColor = Color.White
+            containerColor = MaterialTheme.colorScheme.surface
         ),
         shape = RoundedCornerShape(bottomStart = 22.dp, bottomEnd = 22.dp)
     ){
@@ -172,106 +173,150 @@ fun DetailCard(){
                     .padding(start =16.dp,top=8.dp,end=16.dp),
                 Arrangement.SpaceBetween
             ){
-                Text(
-                    text = restaurantName.value,
-                    color=Color.Black,
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Bold
-                )
-                Card(modifier = Modifier
-                    .size(width = 45.dp, height = 22.dp),
-                    shape = RoundedCornerShape(6.dp),
-                    colors = CardDefaults.cardColors(
-                        colorResource(R.color.purple_500)
+
+                Column{
+                    Text(
+                        text = FoodName.value,
+                        color= MaterialTheme.colorScheme.onSurface,
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Bold
                     )
 
-                ){
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically
-                    ){
-                        Text(
-                            text = rating.value,
-                            modifier = Modifier.padding(start = 4.dp),
-                            color=Color.White,
-                            fontSize = 12.sp,
-                            fontWeight = FontWeight.SemiBold
-                        )
-                        Icon(
-                            painterResource(R.drawable.star),
-                            modifier = Modifier.padding(start=5.dp,top=6.dp, bottom = 2.dp )
-                                .size(10.dp),
-                            tint =Color.White,
-                            contentDescription = null
+                    Text(
+                        text= price.value,
+                        color= MaterialTheme.colorScheme.onSurface,
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.SemiBold
 
-                        )
-
-
-                    }
+                    )
                 }
 
-                Card(
-                    modifier = Modifier.padding(start=16.dp,6.dp)
-                        .width(165.dp).height(22.dp),
-                    shape=RoundedCornerShape(12.dp),
-                    colors= CardDefaults.cardColors(Color.Gray.copy(alpha=0.2f))
+
+
+                Button(
+                    onClick = {},
+                    shape = RoundedCornerShape(16.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color(0xFF2E7D32) // Green color
+                    ),
+                    modifier = Modifier
+                        .height(60.dp)
+                        .padding(8.dp),
+                    elevation = ButtonDefaults.buttonElevation(
+                        defaultElevation = 6.dp
+                    )
                 ){
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
 
-                    ){
-                        Icon(
-                            painterResource(R.drawable.check),
-                            modifier = Modifier.padding(start=8.dp,top=6.dp )
-                                .size(12.dp),
-                            tint =colorResource(R.color.purple_500),
-                            contentDescription = null
-
+                    Text("ADD",
+                        style = TextStyle(
+                            fontSize = 15.sp,
+                            fontWeight = FontWeight.Bold
+                        ),
+                        color=Color.White
                         )
-                        Spacer(modifier = Modifier.width(4.dp))
-                        Text(
-                            text = rating.value,
-                            modifier = Modifier.padding(start = 4.dp),
-                            color=Color.White,
-                            fontSize = 12.sp,
-                            fontWeight = FontWeight.SemiBold
-                        )
-
-
-
-                    }
-
-
-                    HorizontalDivider(modifier = Modifier
-                        .padding(start=16.dp,end=16.dp,top=6.dp),
-                        color=colorResource(R.color.purple_200),
-                        thickness = 1.dp
+                    Icon(
+                        imageVector = Icons.Default.Add,
+                        contentDescription = null,
+                        modifier=Modifier.size(30.dp).padding(bottom = 5.dp),
+                        tint=Color.White
                     )
 
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
+                }
 
-                        ){
-                        Icon(
-                            painterResource(R.drawable.discount),
-                            modifier = Modifier.padding(start=16.dp,top=3.dp )
-                                .size(16.dp),
-                            tint =Color.Blue,
-                            contentDescription = null
+//                Card(modifier = Modifier
+//                    .size(width = 45.dp, height = 22.dp),
+//                    shape = RoundedCornerShape(6.dp),
+//                    colors = CardDefaults.cardColors(
+//                        colorResource(R.color.purple_500)
+//                    )
+//
+//                ){
+//                    Row(
+//                        modifier = Modifier.fillMaxWidth(),
+//                        verticalAlignment = Alignment.CenterVertically
+//                    ){
+//                        Text(
+//                            text = rating.value,
+//                            modifier = Modifier.padding(start = 4.dp),
+//                            color=Color.White,
+//                            fontSize = 12.sp,
+//                            fontWeight = FontWeight.SemiBold
+//                        )
+//                        Icon(
+//                            painterResource(R.drawable.star),
+//                            modifier = Modifier.padding(start=5.dp,top=6.dp, bottom = 2.dp )
+//                                .size(10.dp),
+//                            tint =Color.White,
+//                            contentDescription = null
+//
+//                        )
+//
+//
+//                    }
+//                }
 
-                        )
-                        Spacer(modifier = Modifier.width(4.dp))
-                        Text(
-                            text = "Flat Rs 50 OFF on above Rs 249",
-                            modifier = Modifier.padding(start = 4.dp),
-                            color=Color.Gray,
-                            fontSize = 14.sp,
-                            fontWeight = FontWeight.SemiBold
-                        )
+//                Card(
+//                    modifier = Modifier.padding(start=16.dp,6.dp)
+//                        .width(165.dp).height(22.dp),
+//                    shape=RoundedCornerShape(12.dp),
+//                    colors= CardDefaults.cardColors(MaterialTheme.colorScheme.onSurfaceVariant)
+//                ){
+//                    Row(
+//                        modifier = Modifier.fillMaxWidth(),
+//
+//                    ){
+//                        Icon(
+//                            painterResource(R.drawable.check),
+//                            modifier = Modifier.padding(start=8.dp,top=6.dp )
+//                                .size(12.dp),
+//                            tint = MaterialTheme.colorScheme.onSurface,
+//                            contentDescription = null
+//
+//                        )
+//                        Spacer(modifier = Modifier.width(4.dp))
+//                        Text(
+//                            text = rating.value,
+//                            modifier = Modifier.padding(start = 4.dp),
+//                            color=Color.White,
+//                            fontSize = 12.sp,
+//                            fontWeight = FontWeight.SemiBold
+//                        )
+//
+//
+//
+//                    }
 
 
-
-                    }
+//                    HorizontalDivider(modifier = Modifier
+//                        .padding(start=16.dp,end=16.dp,top=6.dp),
+//                        color=colorResource(R.color.purple_200),
+//                        thickness = 1.dp
+//                    )
+//
+//                    Row(
+//                        modifier = Modifier.fillMaxWidth(),
+//
+//                        ){
+//                        Icon(
+//                            painterResource(R.drawable.discount),
+//                            modifier = Modifier.padding(start=16.dp,top=3.dp )
+//                                .size(16.dp),
+//                            tint =Color.Blue,
+//                            contentDescription = null
+//
+//                        )
+//                        Spacer(modifier = Modifier.width(4.dp))
+//                        Text(
+//                            text = "Flat Rs 50 OFF on above Rs 249",
+//                            modifier = Modifier.padding(start = 4.dp),
+//                            color= MaterialTheme.colorScheme.onBackground,
+//                            fontSize = 14.sp,
+//                            fontWeight = FontWeight.SemiBold
+//                        )
+//
+//
+//
+//                    }
 
 
                 }
@@ -281,7 +326,7 @@ fun DetailCard(){
         }
 
     }
-}
+
 
 @Composable
 fun PageCount(pagerState: PagerState){

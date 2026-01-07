@@ -84,7 +84,7 @@ fun UserLoginScreen(navController: NavHostController) {
                         )
                     }
                 },
-                // 🔽 BOTTOM BAR INSIDE SCAFFOLD
+
 
             )
 
@@ -214,7 +214,13 @@ fun UserLoginScreen(navController: NavHostController) {
                         .clip(RoundedCornerShape(16.dp))
                         .background(Brush.horizontalGradient(buttonGradient))
                         .clickable {
-                            // TODO: Login logic
+                            navController.navigate(Route.UserMainContainer.route()){
+                                //Remove Login from backStack
+
+                                popUpTo(Route.UserLoginScreen.route()){
+                                    inclusive=true
+                                }
+                            }
                         },
                     contentAlignment = Alignment.Center
                 ) {

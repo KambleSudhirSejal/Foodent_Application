@@ -19,6 +19,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -57,18 +58,18 @@ fun ChineseCategoryScreen(navController: NavController) {
 @Composable
 fun ChineseCategoryCards(navController: NavController){
     val LazyListState = rememberLazyListState()
-    val filters = listOf("Filter","Flash Sale","Under 30 mins" ,"Rating","Schedule")
+   val filters = listOf("Filter","Flash Sale","Under 30 mins" ,"Rating","Schedule")
 
     Column(modifier = Modifier
         .fillMaxSize()
-        .background(Color.White)
+        .background(MaterialTheme.colorScheme.background)
     ){
-        FilterRow(filters)
+//        FilterRow(filters)
         Text(
             text="RECOMMENDED FOR YOU",
             style= TextStyle(
                 fontSize = 14.sp,
-                color=Color.Gray,
+                color= MaterialTheme.colorScheme.onSurface,
                 fontWeight = FontWeight.Normal,
                 letterSpacing = 2.sp,
                 fontFamily = FontFamily.SansSerif
@@ -87,15 +88,11 @@ fun ChineseCategoryCards(navController: NavController){
         ){
             Column{
                 Text(
-                    text="553 RESTAURANTS DELIVERING TO YOU",
+                    text="Today's Special",
                     modifier= Modifier,
-                    color=Color.Gray
+                    color= MaterialTheme.colorScheme.onSurface
                 )
-                Text(
-                    text="Featured",
-                    modifier = Modifier.padding(start=5.dp),
-                    color=Color.Gray
-                )
+
             }
 
 

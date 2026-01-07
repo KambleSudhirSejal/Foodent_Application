@@ -21,6 +21,30 @@ sealed class SubNavigation {
 
 }
 
+sealed class UserBottomRoute(val route:String){
+
+
+    object Home: UserBottomRoute("user_home")
+    object Cart : UserBottomRoute("user_cart")
+    object profile : UserBottomRoute("user_profile")
+}
+
+sealed class AdminBottomRoute(val route:String){
+    object Menu: AdminBottomRoute("admin_menu")
+    object Order : AdminBottomRoute("admin_order")
+    object Profile: AdminBottomRoute("admin_profile")
+}
+
+sealed class FacultyBottomRoute(val route:String){
+    object Menu: FacultyBottomRoute("faculty_menu")
+    object Cart : FacultyBottomRoute("faculty_cart")
+    object Profile: FacultyBottomRoute("faculty_profile")
+}
+
+
+
+
+
 sealed class Route{
 
     @Serializable
@@ -31,6 +55,15 @@ sealed class Route{
 
     @Serializable
     object UserSignUpScreen : Route()
+
+    @Serializable
+    object UserMainContainer : Route()
+
+    @Serializable
+    object AdminMainContainer : Route()
+
+    @Serializable
+    object FacultyMainContainer:Route()
 
     @Serializable
     object UserCartScreen : Route()
@@ -94,6 +127,9 @@ sealed class Route{
 
     @Serializable
     object FacultySignUp:Route()
+
+    @Serializable
+    object FacultyProfileScreen: Route()
 
     @Serializable
     object SearchBarScreen:Route()

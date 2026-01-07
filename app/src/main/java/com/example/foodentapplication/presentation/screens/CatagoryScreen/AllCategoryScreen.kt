@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -42,15 +43,13 @@ fun AllCategoryScreen(navController: NavController) {
         ){
             Column{
                 Text(
-                    text="553 Restaurant Delivering to you",
+                    text="What Special You want to eat Today !",
                     modifier = Modifier,
-                    color=Color.Gray
+                    color= MaterialTheme.colorScheme.onSurface
                 )
-                Text(
-                    text="Featured",
-                    modifier = Modifier.padding(start=5.dp),
-                    color=Color.Gray
-                )
+
+                Spacer(modifier=Modifier.height(20.dp))
+
 
             }
         }

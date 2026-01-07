@@ -2,6 +2,13 @@ package com.example.foodentapplication.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
+
+val LightBg = Color(0xFFFFF7F2)
+val CardBg = Color.White
+val PrimaryOrange = Color(0xFFFF8A00)
+val TextGray = Color(0xFF7A7A7A)
+val LogoutRed = Color(0xFFFF4D4D)
+
 /* ---------- Light Colors ---------- */
 
 // Student (Orange)

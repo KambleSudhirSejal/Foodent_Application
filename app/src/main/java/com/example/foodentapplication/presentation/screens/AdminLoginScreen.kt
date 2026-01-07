@@ -51,6 +51,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.example.foodentapplication.presentation.navigation.Route
+import com.example.foodentapplication.presentation.navigation.route
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -232,7 +233,13 @@ fun AdminLoginScreen(
                         .clip(RoundedCornerShape(16.dp))
                         .background(Brush.horizontalGradient(buttonGradient))
                         .clickable {
-                            // TODO: Login logic
+                            navController.navigate(Route.AdminMainContainer.route()){
+                                //Remove Login from backStack
+
+                                popUpTo(Route.AdminLoginScreen.route()){
+                                    inclusive=true
+                                }
+                            }
                         },
                     contentAlignment = Alignment.Center
                 ) {

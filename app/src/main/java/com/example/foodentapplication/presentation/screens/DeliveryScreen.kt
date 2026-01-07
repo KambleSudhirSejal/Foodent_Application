@@ -25,6 +25,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -84,7 +85,7 @@ fun DeliveryScreen(navController: NavController, listState: LazyListState) {
             contentPadding = PaddingValues(vertical = 0.dp),
             modifier= Modifier
                 .fillMaxSize()
-                .background(color = Color.White)
+                .background(color = MaterialTheme.colorScheme.background)
                 .padding(paddingValues)
                 .nestedScroll(scrollBehaviour.nestedScrollConnection)
         ) {
@@ -92,7 +93,7 @@ fun DeliveryScreen(navController: NavController, listState: LazyListState) {
                 FoodCategoryTab(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .background(color=Color.White),
+                        .background(color= MaterialTheme.colorScheme.background),
                     selectedTabIndex=selectedTabIndex,
                     onTabSelected = {selectedTabIndex=it}
 

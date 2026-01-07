@@ -11,6 +11,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Colors
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.School
 
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -51,12 +54,15 @@ fun TopAppBarDeliverScreen(
         title={
             Column{
                 Row(
-                    modifier=Modifier.fillMaxWidth().height(22.dp)
+                    modifier=Modifier.fillMaxWidth()
+                        .height(22.dp)
+                        .background(androidx.compose.material3.MaterialTheme.colorScheme.background)
+
                 ) {
                     Text(
-                        text = "Home",
+                        text = "Sejal kamble",
                         fontSize = 20.sp,
-                        color = Color.Black,
+                        color =Color.White,
                         fontWeight = FontWeight.Bold
 
                     )
@@ -70,7 +76,7 @@ fun TopAppBarDeliverScreen(
                         )
                 }
                     Text(
-                        text="New Indora Republican Nagar ",
+                        text="Kamblesejal277@gmail.com",
                         fontWeight = FontWeight.SemiBold,
                         color=Color.Gray,
                         fontSize = 15.sp
@@ -81,7 +87,7 @@ fun TopAppBarDeliverScreen(
         },
         navigationIcon ={
             Icon(
-                painter = painterResource(R.drawable.locationdeliveryscreen),
+                imageVector  = Icons.Default.School,
                 modifier = Modifier.size(35.dp),
                 tint=Color.Red,
                 contentDescription = "Location"
@@ -100,7 +106,7 @@ fun TopAppBarDeliverScreen(
                 contentAlignment = Alignment.Center
 
             ){
-                Text("H",
+                Text("S",
                     fontWeight = FontWeight.Bold,
                     fontSize = 16.sp,
                     color=Color.Blue)
