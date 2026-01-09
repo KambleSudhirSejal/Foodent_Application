@@ -27,6 +27,8 @@ val AdminLight2 = Color(0xFF42A5F5)
 val BackgroundLight = Color(0xFFF7F7F7)
 val SurfaceLight = Color(0xFFFFFFFF)
 
+val QuantityBgLight=Color(0x0F989696)
+
 
 /* ---------- Dark Colors ---------- */
 
@@ -45,3 +47,5 @@ val AdminDark2 = Color(0xFF1E88E5)
 // Common
 val BackgroundDark = Color(0xFF121212)
 val SurfaceDark = Color(0xFF3F3E3E)
+
+val QuantityBgDark=Color(0x0FFDFBFB)

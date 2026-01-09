@@ -158,7 +158,8 @@ fun SmallDetailCard(){
 @Composable
 fun DetailCard(){
     val FoodName = remember{ mutableStateOf("Veg Biryani") }
-    val price = remember { mutableStateOf("245 Rs") }
+    val foodDescription = remember {mutableStateOf("egetable Biryani is an aromatic rice dish made with basmati rice, mix veggies, herbs & biryani spices")}
+    val price = remember { mutableStateOf("Rs. 245") }
 
     Card(
         modifier = Modifier.fillMaxWidth().height(100.dp),
@@ -179,14 +180,16 @@ fun DetailCard(){
                         text = FoodName.value,
                         color= MaterialTheme.colorScheme.onSurface,
                         fontSize = 20.sp,
-                        fontWeight = FontWeight.Bold
+                        fontWeight = FontWeight.Normal
                     )
+                    Spacer(modifier=Modifier.height(5.dp))
+
 
                     Text(
                         text= price.value,
                         color= MaterialTheme.colorScheme.onSurface,
                         fontSize = 15.sp,
-                        fontWeight = FontWeight.SemiBold
+                        fontWeight = FontWeight.Bold
 
                     )
                 }

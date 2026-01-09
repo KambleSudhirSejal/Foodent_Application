@@ -62,7 +62,7 @@ fun TopAppBarDeliverScreen(
                     Text(
                         text = "Sejal kamble",
                         fontSize = 20.sp,
-                        color =Color.White,
+                        color = androidx.compose.material3.MaterialTheme.colorScheme.onSurface,
                         fontWeight = FontWeight.Bold
 
                     )
