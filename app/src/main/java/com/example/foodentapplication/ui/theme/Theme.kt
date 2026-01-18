@@ -19,7 +19,8 @@ private val DarkColorScheme = darkColorScheme(
     onPrimary = Color.Black,
     onBackground = Color.White,
     onSurface = Color.White,
-    onTertiary = QuantityBgDark
+    onTertiary = QuantityBgDark,
+    onSecondaryContainer = TokenTextColor
 
 )
 
@@ -30,7 +31,8 @@ private val LightColorScheme = lightColorScheme(
     onPrimary = Color.White,
     onBackground = Color.Black,
     onSurface = Color.Black,
-    onTertiary = QuantityBgLight
+    onTertiary = QuantityBgLight,
+    onSecondaryContainer = TokenTextColorLight
 
     /* Other default colors to override
     background = Color(0xFFFFFBFE),

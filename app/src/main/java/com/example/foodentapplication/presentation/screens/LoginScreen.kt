@@ -23,7 +23,6 @@ import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ButtonElevation
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -44,7 +43,6 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -54,8 +52,6 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
-import androidx.navigation.NavHostController
-import coil.size.OriginalSize
 import com.example.foodentapplication.R
 import com.example.foodentapplication.data.models.UserData
 import com.example.foodentapplication.presentation.components.OrComponent
@@ -178,17 +174,17 @@ fun LoginScreen(
 
             Button(
                 onClick = {
-                    if(email.isNotBlank() && password.isNotBlank()){
-                        val userData= UserData(
-                            email=email,
-                            password = password
-                        )
-                        viewModel.loginUser(userData)
-                    }
-                    else{
-                        Toast.makeText(context,"Please field all the details",Toast.LENGTH_SHORT).show()
-
-                    }
+//                    if(email.isNotBlank() && password.isNotBlank()){
+//                        val userData= UserData(
+//                            email=email,
+//                            password = password,
+//                        )
+//                        viewModel.loginUser(userData)
+//                    }
+//                    else{
+//                        Toast.makeText(context,"Please field all the details",Toast.LENGTH_SHORT).show()
+//
+//                    }
                 },
                 modifier=Modifier.fillMaxWidth()
                     .padding(horizontal = 30.dp,

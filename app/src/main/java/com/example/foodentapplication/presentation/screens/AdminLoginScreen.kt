@@ -1,5 +1,6 @@
 package com.example.foodentapplication.presentation.screens
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -41,6 +42,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -50,6 +52,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
+import com.example.foodentapplication.common.AdminConfig
+import com.example.foodentapplication.common.AppLogger
 import com.example.foodentapplication.presentation.navigation.Route
 import com.example.foodentapplication.presentation.navigation.route
 
@@ -61,6 +65,11 @@ fun AdminLoginScreen(
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var passwordVisible by remember{mutableStateOf(false)}
+    val isButtonEnabled = email.isNotEmpty() && password.isNotBlank()
+
+    val context = LocalContext.current
+
+    AppLogger.ui("AdminLoginScreen","Enter into admin login screen")
 
     val buttonGradient = listOf(
         Color(0xFF3F51B5),
@@ -231,14 +240,34 @@ fun AdminLoginScreen(
                         .fillMaxWidth()
                         .height(56.dp)
                         .clip(RoundedCornerShape(16.dp))
-                        .background(Brush.horizontalGradient(buttonGradient))
-                        .clickable {
-                            navController.navigate(Route.AdminMainContainer.route()){
-                                //Remove Login from backStack
+                        .background(
+                            if(isButtonEnabled)
+                            Brush.horizontalGradient(buttonGradient)
+                            else
+                                Brush.horizontalGradient(
+                                    listOf(Color.Gray, Color.LightGray)
+                                )
+                        )
+                        .clickable(enabled = isButtonEnabled ) {
 
-                                popUpTo(Route.AdminLoginScreen.route()){
-                                    inclusive=true
+                            AppLogger.ui("AdminLoginScreen","Button is clicked")
+
+                            if(email == AdminConfig.ADMIN_EMAIL && password == AdminConfig.ADMIN_PASSWORD) {
+
+                                AppLogger.ui("AdminLoginScreen","Login Successful")
+
+                                Toast.makeText(context,"Admin Login successfully",Toast.LENGTH_SHORT).show()
+                                navController.navigate(Route.AdminMainContainer.route()) {
+                                    //Remove Login from backStack
+
+                                    popUpTo(Route.AdminLoginScreen.route()) {
+                                        inclusive = true
+                                    }
                                 }
+                            }else{
+                                AppLogger.ui("AdminLoginScreen","Login failed")
+                                Toast.makeText(context,"Invalid admin email or password",Toast.LENGTH_SHORT).show()
+                                "Invalid admin or password"
                             }
                         },
                     contentAlignment = Alignment.Center

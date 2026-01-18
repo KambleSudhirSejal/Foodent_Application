@@ -8,7 +8,7 @@ import javax.inject.Inject
 
 class LoginUserUseCase @Inject constructor(val repo: Repo) {
 
-    fun loginUser(userData: UserData): Flow<ResultState<String>>{
+   suspend fun loginUser(userData: UserData): ResultState<String>{
         return repo.loginWithEmailAndPassword(userData )
     }
 

@@ -7,4 +7,6 @@ package com.example.foodentapplication.common
      object Loading: ResultState<Nothing>()
 
 
+
+
 }

@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class CreateUserUseCase @Inject constructor(val repo: Repo) {
-    fun createUser(userData: UserData): Flow<ResultState<String>> {
+   suspend fun createUser(userData: UserData): ResultState<UserData> {
         return repo.registerWithEmailAndPassword(userData)
 
     }

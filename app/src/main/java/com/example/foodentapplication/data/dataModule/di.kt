@@ -2,6 +2,7 @@ package com.example.foodentapplication.data.dataModule
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
 
 import dagger.Module
 import dagger.Provides
@@ -24,5 +25,14 @@ object DataModule {
     fun provideFireStore(): FirebaseFirestore {
         return FirebaseFirestore.getInstance()
     }
+
+    @Singleton
+    @Provides
+    fun provideImageStorage(): FirebaseStorage {
+        return FirebaseStorage.getInstance()
+    }
+
+
+
 
 }

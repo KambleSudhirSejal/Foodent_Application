@@ -61,6 +61,7 @@ dependencies {
     implementation(libs.androidx.compose.foundation)
 //    implementation(libs.firebase.firestore.ktx)
     implementation(libs.firebase.firestore)
+    implementation(libs.firebase.storage)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -83,8 +84,12 @@ dependencies {
 
 
 
-    // this is for coil
+
+
+    // this is for coil for images
     implementation("io.coil-kt:coil-compose:2.6.0")
+
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
 
 
     // Navigation
@@ -113,4 +118,10 @@ dependencies {
 
     //splashScreen
     implementation("androidx.core:core-splashscreen:1.0.1")
+
+    //coroutines
+
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9")
+
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.7.3")
 }

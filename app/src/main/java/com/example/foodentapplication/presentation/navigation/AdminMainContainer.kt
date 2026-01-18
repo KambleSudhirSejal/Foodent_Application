@@ -33,7 +33,7 @@ fun AdminMainContainer(
 
         ){
             composable(AdminBottomRoute.Menu.route){
-                AdminMenuScreen()
+                AdminMenuScreen(navController)
 
             }
             composable(AdminBottomRoute.Order.route){

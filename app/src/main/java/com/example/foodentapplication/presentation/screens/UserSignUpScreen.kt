@@ -17,7 +17,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
-import androidx.compose.material.icons.filled.MenuBook
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.School
 import androidx.compose.material.icons.filled.Visibility
@@ -31,6 +30,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -48,14 +49,26 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.example.foodentapplication.common.AppLogger
+import com.example.foodentapplication.data.models.UserData
 import com.example.foodentapplication.presentation.navigation.Route
 import com.example.foodentapplication.presentation.navigation.route
+import com.example.foodentapplication.presentation.viewModel.ZomViewModel
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun UserSignUpScreen(navController: NavHostController) {
+fun UserSignUpScreen(navController: NavHostController,
+                     viewModel: ZomViewModel = hiltViewModel()
+                     ) {
+
+    LaunchedEffect(Unit) {
+        AppLogger.ui("UserSignUpScreen","Sign Up Screen Open")
+    }
+
+    val signUpState by viewModel.signUpScreenState.collectAsState()
 
     var name by remember {mutableStateOf("")}
     var email by remember { mutableStateOf("") }
@@ -66,6 +79,19 @@ fun UserSignUpScreen(navController: NavHostController) {
         Color(0xFFCC3608),
         Color(0xFFF66A3C)
     )
+
+
+    if(signUpState.userData != null){
+        LaunchedEffect(Unit) {
+            navController.navigate(Route.UserLoginScreen.route()){
+                popUpTo(Route.UserSignUpScreen.route()){
+                    inclusive = true
+                }
+
+            }
+
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -221,6 +247,16 @@ fun UserSignUpScreen(navController: NavHostController) {
                         PasswordVisualTransformation()
                 )
 
+                if(signUpState.errorMessage != null){
+                    Spacer(Modifier.height(8.dp))
+                    Text(
+                        text=signUpState.errorMessage!!,
+                        color=Color.Red,
+                        fontSize = 13.sp,
+                        textAlign = TextAlign.Center
+                    )
+                }
+
 
 
                 Spacer(Modifier.height(30.dp))
@@ -232,13 +268,29 @@ fun UserSignUpScreen(navController: NavHostController) {
                         .height(56.dp)
                         .clip(RoundedCornerShape(16.dp))
                         .background(Brush.horizontalGradient(buttonGradient))
-                        .clickable {
+                        .clickable(enabled = !signUpState.isLoading) {
                             // TODO: Login logic
+
+                            AppLogger.ui("UserSignUpScreen","SignUp clicked -> name =$name ,email=$email")
+
+                            viewModel.createUser(
+                                UserData(
+                                   name=name,
+                                    email = email,
+                                    password = password
+                                )
+
+                            )
+
+
                         },
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        text = "Sign Up",
+                        text = if(signUpState.isLoading)
+                            "Signing Up..."
+                        else
+                            "Sign Up",
                         color = Color.White,
                         fontWeight = FontWeight.Bold,
                         fontSize = 16.sp

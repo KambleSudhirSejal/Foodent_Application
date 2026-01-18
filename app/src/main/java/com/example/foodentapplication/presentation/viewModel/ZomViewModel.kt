@@ -3,6 +3,7 @@ package com.example.foodentapplication.presentation.viewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.foodentapplication.common.AppLogger
 import com.example.foodentapplication.common.ResultState
 import com.example.foodentapplication.data.models.UserData
 import com.example.foodentapplication.domain.useCases.CreateUserUseCase
@@ -28,74 +29,98 @@ class ZomViewModel @Inject constructor(
     val loginScreenState = _loginScreenState.asStateFlow()
 
     fun  createUser(userData : UserData){
+
+        AppLogger.viewModel(
+            "ZoomViewmodel","createUser called with $userData"
+        )
+
+        if(userData.name.isBlank()){
+            AppLogger.viewModel("ZoomViewModel","Validation failed: name empty")
+            return
+        }
         viewModelScope.launch {
-            createUserUseCase.createUser(userData).collect {
-                when(it){
-                    is ResultState.Error->{
-                        _signUpScreenState.value=_signUpScreenState.value.copy(
-                            isLoading=false,
-                            errorMessage=it.message
-                        )
-                    }
-                    ResultState.Loading -> {
-                        _signUpScreenState.value = _signUpScreenState.value.copy(
-                            isLoading = true
-                        )
-                    }
 
-                    is ResultState.Success->{
+            AppLogger.viewModel("ZoomViewModel","Starting the signup process")
 
-                        _signUpScreenState.value=_signUpScreenState.value.copy(
-                            isLoading=false,
-                            errorMessage=it.data
-                        )
-                    }
+            _signUpScreenState.value = _signUpScreenState.value.copy(isLoading = true)
+
+            when (val result = createUserUseCase.createUser(userData)) {
+                is ResultState.Success -> {
+                    AppLogger.viewModel(
+                        "ZoomViewModel","signup success"
+                    )
+                    _signUpScreenState.value = _signUpScreenState.value.copy(
+                        isLoading = false,
+                        userData = result.data
+                    )
                 }
+
+                is ResultState.Error -> {
+                    AppLogger.viewModel(
+                        "ZoomViewModel","login failed"
+                    )
+                    _signUpScreenState.value = _signUpScreenState.value.copy(
+                        isLoading = false,
+                        errorMessage = result.message
+                    )
+                }
+
+                else -> {}
 
             }
 
         }
-
-
 
     }
 
     fun loginUser(userData: UserData){
+
+        AppLogger.viewModel(
+            "ZoomViewModel","loginUser called  for $userData"
+        )
         viewModelScope.launch {
-            loginUserUseCase.loginUser(userData).collect {
-                when(it){
-                    is ResultState.Error->{
-                        _loginScreenState.value=_loginScreenState.value.copy(
-                            isLoading = false,
-                            errorMessage = it.message
-                        )
-                    }
-                    is ResultState.Loading->{
 
-                        _loginScreenState.value = _loginScreenState.value.copy(
-                            isLoading = true
-                        )
-                    }
-                    is ResultState.Success<*> -> {
-                        _loginScreenState.value=_loginScreenState.value.copy(
-                            isLoading = false,
-                            errorMessage = it.data as String?
-                        )
-                    }
+            AppLogger.viewModel(
+                "ZoomViewModel","starting the login process"
+            )
 
+            _loginScreenState.value = _loginScreenState.value.copy(isLoading = true)
+
+            when (val result = loginUserUseCase.loginUser(userData)) {
+                is ResultState.Success -> {
+                    AppLogger.viewModel(
+                        "ZoomViewModel","login success"
+                    )
+                    _loginScreenState.value = _loginScreenState.value.copy(
+                        isLoading = false,
+                        userData = result.data
+                    )
                 }
 
+                is ResultState.Error -> {
+                    AppLogger.viewModel(
+                        "ZoomViewModel","login failed"
+                    )
+                    _loginScreenState.value = _loginScreenState.value.copy(
+                        isLoading = false,
+                        errorMessage = result.message
+                    )
+                }
+
+                else -> {}
+
             }
+
         }
+
+        }
+
     }
-
-
-}
 
 data class SignUpScreenState(
     val isLoading:Boolean=false,
     val errorMessage:String?=null,
-    val userData:String?=null
+    val userData: UserData?=null
 )
 
 data class LoginScreenState(
@@ -103,3 +128,5 @@ data class LoginScreenState(
     val errorMessage:String?=null,
     val userData:String?=null
 )
+
+

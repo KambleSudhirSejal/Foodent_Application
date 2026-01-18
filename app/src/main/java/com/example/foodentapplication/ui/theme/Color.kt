@@ -29,6 +29,8 @@ val SurfaceLight = Color(0xFFFFFFFF)
 
 val QuantityBgLight=Color(0x0F989696)
 
+val TokenTextColorLight=Color(0xFFE58905)
+
 
 /* ---------- Dark Colors ---------- */
 
@@ -49,3 +51,5 @@ val BackgroundDark = Color(0xFF121212)
 val SurfaceDark = Color(0xFF3F3E3E)
 
 val QuantityBgDark=Color(0x0FFDFBFB)
+
+val TokenTextColor=Color(0xFFFDCE3E)
