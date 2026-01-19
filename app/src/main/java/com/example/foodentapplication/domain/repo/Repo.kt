@@ -14,4 +14,8 @@ interface Repo {
   suspend fun addFoodItem(foodItem: FoodItem) : ResultState<String>
   suspend fun getFoodItem(category:String): ResultState<List<FoodItem>>
 
+  suspend fun updateFoodItem(foodItem: FoodItem): ResultState<String>
+
+  suspend fun deleteFoodItem(foodId:String) : ResultState<String>
+
 }

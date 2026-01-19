@@ -120,12 +120,6 @@ class RepoImpl @Inject constructor(
     override suspend fun addFoodItem(foodItem: FoodItem): ResultState<String> {
       return try{
 
-
-
-
-
-
-
           AppLogger.repo("Repo","Enter into Add Food item")
           val docRef = firebaseFireStore.collection("foods").document()
 
@@ -172,6 +166,39 @@ class RepoImpl @Inject constructor(
 
     }
 
+    override suspend fun updateFoodItem(foodItem: FoodItem): ResultState<String> {
+
+        return  try{
+            firebaseFireStore
+                .collection("foods")
+                .document(foodItem.id)
+                .set(foodItem)
+                .await()
+
+            ResultState.Success("Item updated")
+
+        }catch(e:Exception){
+            ResultState.Error("Update failed")
+        }
+
+
+    }
+
+    override suspend fun deleteFoodItem(foodId: String): ResultState<String> {
+       return try{
+           firebaseFireStore
+               .collection("foods")
+               .document(foodId)
+               .delete()
+               .await()
+
+           ResultState.Success("Item deleted")
+
+       }catch(e:Exception){
+           ResultState.Error("Delete failed")
+       }
+
+    }
 
 
 }

@@ -47,5 +47,19 @@ class AddFetchItemViewModel @Inject constructor(
         _addFoodState.value = ResultState.Loading
     }
 
+    fun deleteFood(foodId: String) {
+        viewModelScope.launch {
+            repo.deleteFoodItem(foodId)
+            refreshFood()
+        }
+    }
+
+    fun updateFood(foodItem: FoodItem) {
+        viewModelScope.launch {
+            _addFoodState.value = ResultState.Loading
+            _addFoodState.value = repo.updateFoodItem(foodItem)
+        }
+    }
+
 
 }

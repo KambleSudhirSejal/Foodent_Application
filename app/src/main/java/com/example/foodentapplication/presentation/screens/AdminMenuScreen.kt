@@ -23,7 +23,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -76,8 +75,6 @@ import com.example.foodentapplication.common.ResultState
 import com.example.foodentapplication.data.models.FoodCategoryData
 import com.example.foodentapplication.data.models.FoodItem
 import com.example.foodentapplication.domain.domainModule.CloudinaryUploader
-import com.example.foodentapplication.presentation.components.CardImagesRow
-import com.example.foodentapplication.presentation.components.PageCount
 import com.example.foodentapplication.presentation.components.PriceCard
 import com.example.foodentapplication.presentation.viewModel.AddFetchItemViewModel
 
@@ -87,9 +84,12 @@ fun AdminMenuScreen(navController: NavController,
                     viewModel: AddFetchItemViewModel= hiltViewModel()) {
 
    var showAddNewItem by remember {mutableStateOf(false)}
+    var editItem by remember { mutableStateOf<FoodItem?>(null) }
 
     val addFoodState by viewModel.addFoodState.collectAsState()
     val foodListState  by viewModel.foodListState.collectAsState()
+
+
    Scaffold(
        topBar = {
            TopAppBar(
@@ -133,7 +133,7 @@ fun AdminMenuScreen(navController: NavController,
 
                Button(
                    onClick = {
-
+                       editItem = null
                        showAddNewItem = true
                    },
                    modifier = Modifier
@@ -170,12 +170,19 @@ fun AdminMenuScreen(navController: NavController,
                if(showAddNewItem){
                    AddNewItem(
                            addFoodState,
-                           onSubmit={ foodItem ->
-                               viewModel.addFood(foodItem )
+                       foodItem = editItem,
+                           onSubmit={
+                               if(editItem == null){
+                                   viewModel.addFood(it )
+                               }else{
+                                   viewModel.updateFood(it)
+                               }
+
                            },
                            onClose ={
                                viewModel.resetAddFoodState()
                                viewModel.refreshFood()
+                               editItem = null
                                showAddNewItem = false
 
 
@@ -187,7 +194,14 @@ fun AdminMenuScreen(navController: NavController,
 
                Spacer(modifier=Modifier.height(10.dp))
 
-               ShowingAllItems(navController,foodListState,viewModel)
+               ShowingAllItems(navController,
+                   foodListState,
+                   viewModel,
+                   onEditClick={
+                       editItem = it
+                       showAddNewItem = true
+                   })
+
 
            }
        }
@@ -200,7 +214,8 @@ fun AdminMenuScreen(navController: NavController,
 fun ShowingAllItems(
     navController: NavController,
     foodListState: ResultState<List<FoodItem>>,
-    viewModel: AddFetchItemViewModel
+    viewModel: AddFetchItemViewModel,
+    onEditClick:(FoodItem)->Unit
 ){
 
     LaunchedEffect(Unit) {
@@ -233,7 +248,9 @@ fun ShowingAllItems(
                     foodListState.data.forEach { food ->
                         FoodItemCard(
                             navController = navController,
-                            foodItem = food
+                            foodItem = food,
+                            viewModel,
+                            onEditClick = onEditClick
                         )
                     }
                 }
@@ -260,7 +277,12 @@ fun ShowingAllItems(
 
 
 @Composable
-fun FoodItemCard(navController: NavController,foodItem: FoodItem){
+fun FoodItemCard(
+    navController: NavController,
+    foodItem: FoodItem,
+    viewModel: AddFetchItemViewModel,
+   onEditClick: (FoodItem) -> Unit
+){
     Card( onClick = {},
         shape = RoundedCornerShape(22.dp),
         elevation = CardDefaults.cardElevation(4.dp),
@@ -275,8 +297,8 @@ fun FoodItemCard(navController: NavController,foodItem: FoodItem){
                 AsyncImage(
                     model = foodItem.imageUrl,
                     contentDescription = null,
-                    modifier = Modifier.fillMaxWidth(),
-//                        .height(200.dp)
+                    modifier = Modifier.fillMaxWidth()
+                        .height(195.dp),
                     contentScale = ContentScale.Crop,
 
 
@@ -313,14 +335,16 @@ fun FoodItemCard(navController: NavController,foodItem: FoodItem){
                 .padding(top = 192.2.dp)
                ){
 
-                FoodItemName(foodItem)
+                FoodItemName(foodItem,viewModel,
+                    onEditClick=onEditClick)
             }
         }
     }
 }
 
 @Composable
-fun FoodItemName(foodItem1: FoodItem) {
+fun FoodItemName(foodItem1: FoodItem, viewModel: AddFetchItemViewModel,
+                 onEditClick: (FoodItem) -> Unit) {
 
 
         Card(
@@ -371,7 +395,10 @@ fun FoodItemName(foodItem1: FoodItem) {
                         verticalAlignment = Alignment.CenterVertically){
 
                         IconButton(
-                                  onClick = {},
+                                  onClick = {
+                                   onEditClick(foodItem1)
+
+                                  },
                             modifier = Modifier
                                 .size(30.dp)
                                 .background(
@@ -393,7 +420,7 @@ fun FoodItemName(foodItem1: FoodItem) {
                         // 🗑 Delete Button
                         IconButton(
                             onClick = {
-                                // TODO: Delete action
+                              viewModel.deleteFood(foodItem1.id)
                             },
                             modifier = Modifier
                                 .size(30.dp)
@@ -516,11 +543,19 @@ fun DashBoardCard() {
 fun AddNewItem(
 
     addFoodState: ResultState<String>,
+    foodItem: FoodItem?=null,//new for edit
     onSubmit: (FoodItem) -> Unit,
     onClose: () -> Unit
 ){
-
+    var itemName  by remember {mutableStateOf(foodItem?.name ?: "")}
+    var description by remember {mutableStateOf(foodItem?.description ?: "")}
+    var price by remember {mutableStateOf(foodItem?.price?.toString() ?: "")}
+    var selectedCategory by remember {mutableStateOf(foodItem?.category ?: "All")}
     var imageUri by remember {mutableStateOf<Uri?>(null)}
+    var uploadedImageUrl by remember { mutableStateOf<String?>(foodItem?.imageUrl) }
+
+
+
 
     val imagePickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
@@ -544,12 +579,10 @@ fun AddNewItem(
 
         )
 
-    var selectedCategory by remember { mutableStateOf("All") }
 
 
-    var itemName  by remember {mutableStateOf("")}
-    var description by remember {mutableStateOf("")}
-    var price by remember {mutableStateOf("")}
+
+
 
 
 
@@ -558,7 +591,7 @@ fun AddNewItem(
             horizontalAlignment= Alignment.CenterHorizontally){
 
             Text(
-                text="Add New Item",
+                text=if (foodItem == null) "Add New Item" else "Edit Item",
                 style= TextStyle(
                     fontSize = 15.sp,
                     fontWeight = FontWeight.Bold,
@@ -712,26 +745,39 @@ fun AddNewItem(
                 Box(
                     contentAlignment = Alignment.Center
                 ){
-                    if(imageUri == null){
-                        Column(horizontalAlignment = Alignment.CenterHorizontally){
-                            Icon(
-                                imageVector = Icons.Default.Image,
+
+                    when{
+
+                        imageUri != null -> {
+                            AsyncImage(
+                                model = imageUri,
                                 contentDescription = null,
-                                modifier = Modifier.size(40.dp)
+                                modifier = Modifier.fillMaxSize(),
+                                contentScale = ContentScale.Crop
                             )
-                            Spacer(modifier = Modifier.height(6.dp))
-                            Text("Tap to select image ")
                         }
 
-                    }else{
-                        AsyncImage(
-                            model = imageUri,
-                            contentDescription = null,
-                            modifier = Modifier.fillMaxSize(),
-                            contentScale = ContentScale.Crop
-                        )
+                        uploadedImageUrl != null -> {
+                            AsyncImage(
+                                model = uploadedImageUrl,
+                                contentDescription = null,
+                                modifier = Modifier.fillMaxSize(),
+                                contentScale = ContentScale.Crop
+                            )
+                        }
+
+                        else -> {
+                            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                                Icon(Icons.Default.Image, contentDescription = null, modifier = Modifier.size(40.dp))
+                                Spacer(modifier = Modifier.height(6.dp))
+                                Text("Tap to select image")
+                            }
+                        }
+
 
                     }
+
+
                 }
 
 
@@ -746,21 +792,39 @@ fun AddNewItem(
                         itemName.isBlank() ||
                         price.isBlank() ||
                         description.isBlank() ||
-                        imageUri == null
+                        (foodItem == null && imageUri == null)
                     ) {
                         return@Button
                     }
 
+                    // 🔁 EDIT MODE (IMAGE NOT CHANGED)
+                    if (foodItem != null && imageUri == null) {
+
+                        val updatedFood = foodItem.copy(
+                            name = itemName,
+                            price = price.toInt(),
+                            description = description,
+                            category = selectedCategory.lowercase(),
+                            imageUrl = uploadedImageUrl!! // SAFE
+                        )
+
+                        onSubmit(updatedFood)
+                        return@Button
+                    }
+
+                    // add or update image
+
                     CloudinaryUploader.uploadImage(
                         context = context,
                         imageUri = imageUri!!,
-                        onSuccess = { imageUri ->
+                        onSuccess = { newUrl ->
                             val foodItem = FoodItem(
+                                id=foodItem?.id ?: "",
                                 name = itemName,
                                 price = price.toInt(),
                                 description = description,
                                 category = selectedCategory.lowercase(),
-                                imageUrl = imageUri
+                                imageUrl = newUrl
                             )
 
                             onSubmit(foodItem)
@@ -787,7 +851,10 @@ fun AddNewItem(
 
 
                     Text(
-                        text = " Add $selectedCategory",
+                        text =   if (foodItem == null)
+                            "Add $selectedCategory"
+                        else
+                            "Update ${foodItem.name}",
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier.align(Alignment.Center),
