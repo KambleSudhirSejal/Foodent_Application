@@ -1,57 +1,40 @@
 package com.example.foodentapplication.presentation.screens
 
-import android.R.attr.navigationIcon
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.WindowInsetsSides
-import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBars
-import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Abc
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Remove
-import androidx.compose.material.icons.outlined.Home
-import androidx.compose.material.icons.outlined.Phone
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -61,43 +44,38 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.layout.ModifierLocalBeyondBoundsLayout
 
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import coil.compose.AsyncImage
 import com.example.foodentapplication.R
-import com.example.foodentapplication.presentation.components.CardImagesRow
-import com.example.foodentapplication.presentation.components.DetailCard
-import com.example.foodentapplication.presentation.components.PageCount
-import com.example.foodentapplication.presentation.components.PriceCard
-import com.example.foodentapplication.presentation.components.SmallDetailCard
+import com.example.foodentapplication.data.models.CartItem
 import com.example.foodentapplication.presentation.utils.OrderPlaceDialog
+import com.example.foodentapplication.presentation.viewModel.CartViewModel
 
 @Preview
 @Composable
 fun PreviewFinalCheckout(){
     val navController= rememberNavController()
     val listState= rememberLazyListState()
-    FinalCheckoutScreen(navController,listState)
+//    FinalCheckoutScreen(navController,listState)
 }
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FinalCheckoutScreen(navController: NavController, listState: LazyListState) {
+fun FinalCheckoutScreen(navController: NavController, cartViewModel: CartViewModel) {
     var showOrderDialog by remember { mutableStateOf(false) }
     var name by remember { mutableStateOf("My Cart") }
     var productName by remember { mutableStateOf("Peri Peri Burger") }
     var price by remember { mutableStateOf("Rs 249") }
+
+    val cartItems by cartViewModel.cartItems.collectAsState(initial = emptyList())
 
     Scaffold(
         modifier = Modifier.fillMaxSize()
@@ -224,8 +202,13 @@ fun FinalCheckoutScreen(navController: NavController, listState: LazyListState) 
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
+
+            items(cartItems){item->
+                CartItemCard(item)
+            }
+
             item {
-                CartItemCard()
+//                CartItemCard()
                 Spacer(modifier = Modifier.height(12.dp))
                 OrderSummaryCard()
                 Spacer(modifier = Modifier.height(80.dp))
@@ -249,7 +232,7 @@ fun FinalCheckoutScreen(navController: NavController, listState: LazyListState) 
 
 
 @Composable
-fun CartItemCard() {
+fun CartItemCard(item: CartItem) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -261,16 +244,15 @@ fun CartItemCard() {
     ) {
         Column(modifier = Modifier.padding(12.dp)) {
 
-            Image(
-                painter = painterResource(id = R.drawable.burger), // your image
+            AsyncImage(
+                model = item.foodItem.imageUrl,
                 contentDescription = null,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(180.dp)
-                    .clip(RoundedCornerShape(16.dp)),
-                contentScale = ContentScale.Crop
-            )
+                modifier = Modifier.width(70.dp)
+                    .height(100.dp),
+                contentScale = ContentScale.Crop,
 
+
+                )
             Spacer(modifier = Modifier.height(12.dp))
 
             Row(
@@ -280,13 +262,13 @@ fun CartItemCard() {
 
                 Column {
                     Text(
-                        text = "Veggie Burger",
+                        text = item.foodItem.name,
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Bold
                     )
 
                     Text(
-                        text = "₹120",
+                        text = "₹ ${item.foodItem.price}",
                         color = Color(0xFFFF7A00),
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Bold
@@ -296,7 +278,7 @@ fun CartItemCard() {
                 Column(horizontalAlignment = Alignment.End) {
                     Text("TOTAL", fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     Text(
-                        "₹360",
+                        "₹ ${item.quantity}",
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Bold
                     )

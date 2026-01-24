@@ -13,3 +13,9 @@ data class FoodCategory(
     val name:String,
     val imageRes:Int
 )
+
+data class CartItem(
+    val foodItem :FoodItem,
+    val quantity :Int=1
+)
+

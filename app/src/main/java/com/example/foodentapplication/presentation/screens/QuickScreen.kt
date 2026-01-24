@@ -114,7 +114,7 @@ fun QuickScreen(navController: NavController, listState: LazyListState) {
             }
             items(5){
                 Spacer(modifier=Modifier.height(16.dp))
-                HomeScreenCards(navController)
+//                HomeScreenCards(navController)
                 Spacer(modifier=Modifier.height(16.dp))
             }
 

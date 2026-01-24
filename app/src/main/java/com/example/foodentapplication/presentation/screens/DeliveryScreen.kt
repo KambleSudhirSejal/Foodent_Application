@@ -1,15 +1,6 @@
 package com.example.foodentapplication.presentation.screens
 
-import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.AnimatedContentScope
-import androidx.compose.animation.AnimatedContentTransitionScope
-import androidx.compose.animation.ContentTransform
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideOutHorizontally
-import androidx.compose.animation.with
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -29,23 +20,21 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.foodentapplication.presentation.components.DeliveryScreenSearchBar
-import com.example.foodentapplication.presentation.components.FoodCategoryTab
 import com.example.foodentapplication.presentation.components.TopAppBarDeliverScreen
 import com.example.foodentapplication.presentation.screens.CatagoryScreen.AllCategoryScreen
-import com.example.foodentapplication.presentation.screens.CatagoryScreen.ChineseCategoryScreen
-import com.example.foodentapplication.presentation.screens.CatagoryScreen.PizzaCategoryScreen
+import com.example.foodentapplication.presentation.viewModel.AddFetchItemViewModel
+import com.example.foodentapplication.presentation.viewModel.CartViewModel
 
 @Preview
 @Composable
@@ -57,11 +46,18 @@ fun PreviewDelivery(){
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class)
 @Composable
-fun DeliveryScreen(navController: NavController, listState: LazyListState) {
+fun DeliveryScreen(navController: NavController,
+                   listState: LazyListState,
+viewModelAddFetch : AddFetchItemViewModel = hiltViewModel(),
+                   viewModelCart: CartViewModel =hiltViewModel()
+) {
 
-    var selectedTabIndex by rememberSaveable {
-        mutableStateOf(0)
+   val foodListState by viewModelAddFetch.foodListState.collectAsState()
+
+    LaunchedEffect(Unit){
+                   viewModelAddFetch.fetchFoods("all")
     }
+
 
     var scrollBehaviour = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
 
@@ -89,43 +85,12 @@ fun DeliveryScreen(navController: NavController, listState: LazyListState) {
                 .padding(paddingValues)
                 .nestedScroll(scrollBehaviour.nestedScrollConnection)
         ) {
-            stickyHeader {
-                FoodCategoryTab(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(color= MaterialTheme.colorScheme.background),
-                    selectedTabIndex=selectedTabIndex,
-                    onTabSelected = {selectedTabIndex=it}
 
-                )
-
-            }
 
             item{
-                AnimatedContent(
-                    targetState = selectedTabIndex,
-                    transitionSpec = {
-                        if(targetState>initialState){
-                            slideInHorizontally{ width-> width } + fadeIn() with slideOutHorizontally { width->-width }+ fadeOut()
-                        }else{
-
-                            slideInHorizontally{ width-> -width } + fadeIn() with slideOutHorizontally { width->width } + fadeOut()
-
-                        }
-                    },
-                    label = "SlideTabTransition"
 
 
-                ) {
-                    index->
-                    when(index){
-                        0-> AllCategoryScreen(navController)
-                        1-> PizzaCategoryScreen(navController)
-                        2-> ChineseCategoryScreen(navController)
-                        else->AllCategoryScreen(navController)
-                    }
-
-                }
+              AllCategoryScreen(navController,foodListState,viewModelAddFetch,viewModelCart)
             }
         }
 

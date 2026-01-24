@@ -97,13 +97,13 @@ fun ChineseCategoryCards(navController: NavController){
 
 
         }
-        Spacer(modifier = Modifier.height(16.dp))
-        HomeScreenCards(navController=navController)
-        Spacer(modifier = Modifier.height(16.dp))
-        HomeScreenCards(navController=navController)
-        Spacer(modifier = Modifier.height(16.dp))
-        HomeScreenCards(navController=navController)
-        Spacer(modifier = Modifier.height(16.dp))
+//        Spacer(modifier = Modifier.height(16.dp))
+//        HomeScreenCards(navController=navController)
+//        Spacer(modifier = Modifier.height(16.dp))
+//        HomeScreenCards(navController=navController)
+//        Spacer(modifier = Modifier.height(16.dp))
+//        HomeScreenCards(navController=navController)
+//        Spacer(modifier = Modifier.height(16.dp))
 
     }
 

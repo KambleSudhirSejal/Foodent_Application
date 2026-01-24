@@ -5,6 +5,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -12,9 +13,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.foodentapplication.presentation.screens.DeliveryScreen
 import com.example.foodentapplication.presentation.screens.FinalCheckoutScreen
-import com.example.foodentapplication.presentation.screens.UserCartScreen
-import com.example.foodentapplication.presentation.screens.UserHomeScreen
 import com.example.foodentapplication.presentation.screens.UserProfileScreen
+import com.example.foodentapplication.presentation.viewModel.CartViewModel
 
 @Composable
 fun UserMainContainer(
@@ -24,9 +24,11 @@ fun UserMainContainer(
     val bottomNavController = rememberNavController()
     val listState= rememberLazyListState()
 
+    val viewModel: CartViewModel = hiltViewModel()
+
     Scaffold(
         bottomBar = {
-            UserBottomBar(navController=bottomNavController)
+            UserBottomBar(navController=bottomNavController,viewModel)
         }
 
     ) { innerPadding->
@@ -41,7 +43,7 @@ fun UserMainContainer(
 
             }
             composable(UserBottomRoute.Cart.route){
-                FinalCheckoutScreen(navController,listState)
+                FinalCheckoutScreen(navController,viewModel)
 
             }
             composable(UserBottomRoute.profile.route){

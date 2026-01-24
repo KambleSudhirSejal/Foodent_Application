@@ -12,10 +12,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
-import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -25,7 +23,6 @@ import androidx.compose.material3.ButtonDefaults
 
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -36,7 +33,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -47,17 +44,23 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.example.foodentapplication.R
+import com.example.foodentapplication.data.models.FoodItem
+import com.example.foodentapplication.presentation.viewModel.AddFetchItemViewModel
+import com.example.foodentapplication.presentation.viewModel.CartViewModel
 
 @Preview
 @Composable
 fun PreviewHomeScreenCard(){
     val navController = rememberNavController()
-    HomeScreenCards(navController)
+//    HomeScreenCards(navController)
 }
 
 
 @Composable
-fun     HomeScreenCards(navController: NavController) {
+fun HomeScreenCards(navController: NavController,
+                        foodItem: FoodItem,
+                        viewModelAddFetch: AddFetchItemViewModel,
+                        viewModelCart: CartViewModel) {
     Card( onClick = {},
         shape = RoundedCornerShape(22.dp),
         elevation = CardDefaults.cardElevation(4.dp),
@@ -66,22 +69,27 @@ fun     HomeScreenCards(navController: NavController) {
     {
 
         Box(modifier = Modifier.fillMaxWidth()){
-            val pager = rememberPagerState(
-                initialPage =0
-            ){4}
-            CardImagesRow(pagerState = pager)
+
+            AsyncImage(
+                model = foodItem.imageUrl,
+                contentDescription = null,
+                modifier = Modifier.fillMaxWidth()
+                    .height(195.dp),
+                contentScale = ContentScale.Crop
+            )
+
+
             Row(modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 10.dp,start=12.dp, end = 12.dp),
                 horizontalArrangement = Arrangement.Center){
 
-                when(pager.currentPage){
-                    0->PriceCard(name="Veg-Biryani" , price = "Rs 240")
-                    1->PriceCard(name="Brick Oven Pizza",price="Rs 259")
-                    2->PriceCard(name="Spring Roll",price="Rs 160")
-                    3->PriceCard(name="Noodles",price="Rs 130")
 
-                }
+                PriceCard(name= foodItem.name
+                    , price = "Rs ${foodItem.price}"
+                )
+
+
                 IconButton(onClick = {}){
                     Icon(painterResource(R.drawable.baseline_bookmark_24),
                         contentDescription = "Book Mark",
@@ -91,13 +99,13 @@ fun     HomeScreenCards(navController: NavController) {
                 }
 
             }
-            PageCount(pagerState = pager)
+
             Column(modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 192.2.dp)
                 .height(120.dp)){
-                SmallDetailCard()
-                DetailCard()
+//                SmallDetailCard()
+                DetailCard(foodItem,viewModelAddFetch,viewModelCart)
             }
 
 
@@ -156,10 +164,12 @@ fun SmallDetailCard(){
 
 
 @Composable
-fun DetailCard(){
-    val FoodName = remember{ mutableStateOf("Veg Biryani") }
-    val foodDescription = remember {mutableStateOf("egetable Biryani is an aromatic rice dish made with basmati rice, mix veggies, herbs & biryani spices")}
-    val price = remember { mutableStateOf("Rs. 245") }
+fun DetailCard(
+    foodItem: FoodItem,
+    viewModelAddFetch: AddFetchItemViewModel,
+    viewModelCart: CartViewModel
+) {
+
 
     Card(
         modifier = Modifier.fillMaxWidth().height(100.dp),
@@ -177,7 +187,7 @@ fun DetailCard(){
 
                 Column{
                     Text(
-                        text = FoodName.value,
+                        text = foodItem.name,
                         color= MaterialTheme.colorScheme.onSurface,
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Normal
@@ -186,7 +196,7 @@ fun DetailCard(){
 
 
                     Text(
-                        text= price.value,
+                        text= "Rs ${foodItem.price}",
                         color= MaterialTheme.colorScheme.onSurface,
                         fontSize = 15.sp,
                         fontWeight = FontWeight.Bold
@@ -197,7 +207,9 @@ fun DetailCard(){
 
 
                 Button(
-                    onClick = {},
+                    onClick = {
+                        viewModelCart.addItem(foodItem)
+                    },
                     shape = RoundedCornerShape(16.dp),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Color(0xFF2E7D32) // Green color
