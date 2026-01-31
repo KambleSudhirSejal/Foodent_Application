@@ -1,6 +1,5 @@
 package com.example.foodentapplication.presentation.screens
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -41,7 +40,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 
@@ -72,8 +70,6 @@ fun PreviewFinalCheckout(){
 fun FinalCheckoutScreen(navController: NavController, cartViewModel: CartViewModel) {
     var showOrderDialog by remember { mutableStateOf(false) }
     var name by remember { mutableStateOf("My Cart") }
-    var productName by remember { mutableStateOf("Peri Peri Burger") }
-    var price by remember { mutableStateOf("Rs 249") }
 
     val cartItems by cartViewModel.cartItems.collectAsState(initial = emptyList())
 
@@ -115,7 +111,7 @@ fun FinalCheckoutScreen(navController: NavController, cartViewModel: CartViewMod
                 navigationIcon = {
                     IconButton(
                         onClick = {
-//                            navController.popBackStack()
+                            navController.popBackStack()
                         }
                     ) {
                         Icon(
@@ -203,14 +199,24 @@ fun FinalCheckoutScreen(navController: NavController, cartViewModel: CartViewMod
                 .padding(innerPadding)
         ) {
 
-            items(cartItems){item->
-                CartItemCard(item)
+            items(
+                items=cartItems,
+                key={it.foodItem.id}
+                ){item->
+                CartItemCard(item,
+                    onIncreaseQuantity = {
+                        cartViewModel.increaseQuantity(item.foodItem.id)
+                    },
+                    onDecreaseQuantity = {
+                        cartViewModel.decreaseQuantity(item.foodItem.id)
+                    },
+)
             }
 
             item {
 //                CartItemCard()
                 Spacer(modifier = Modifier.height(12.dp))
-                OrderSummaryCard()
+                OrderSummaryCard(cartItems = cartItems)
                 Spacer(modifier = Modifier.height(80.dp))
 //                PlaceOrderButton()
             }
@@ -232,7 +238,11 @@ fun FinalCheckoutScreen(navController: NavController, cartViewModel: CartViewMod
 
 
 @Composable
-fun CartItemCard(item: CartItem) {
+fun CartItemCard(item: CartItem,
+                 onIncreaseQuantity: () -> Unit,
+                 onDecreaseQuantity: () -> Unit) {
+
+    val totalPrice = item.foodItem.price * item.quantity
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -244,22 +254,11 @@ fun CartItemCard(item: CartItem) {
     ) {
         Column(modifier = Modifier.padding(12.dp)) {
 
-            AsyncImage(
-                model = item.foodItem.imageUrl,
-                contentDescription = null,
-                modifier = Modifier.width(70.dp)
-                    .height(100.dp),
-                contentScale = ContentScale.Crop,
-
-
-                )
-            Spacer(modifier = Modifier.height(12.dp))
-
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
-            ) {
 
+            ){
                 Column {
                     Text(
                         text = item.foodItem.name,
@@ -274,11 +273,29 @@ fun CartItemCard(item: CartItem) {
                         fontWeight = FontWeight.Bold
                     )
                 }
+                AsyncImage(
+                    model = item.foodItem.imageUrl,
+                    contentDescription = null,
+                    modifier = Modifier.width(70.dp)
+                        .height(100.dp),
+                    contentScale = ContentScale.Crop,
+
+
+                    )
+
+
+            }
+
+
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+
 
                 Column(horizontalAlignment = Alignment.End) {
                     Text("TOTAL", fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     Text(
-                        "₹ ${item.quantity}",
+                        "₹ ${totalPrice.toString()}",
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Bold
                     )
@@ -287,14 +304,22 @@ fun CartItemCard(item: CartItem) {
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            QuantitySelector()
+            QuantitySelector(
+                quantity = item.quantity,
+                onIncreaseQuantity = onIncreaseQuantity,
+                onDecreaseQuantity = onDecreaseQuantity
+            )
         }
     }
-}
+
+
 
 @Composable
-fun QuantitySelector() {
-    var quantity by remember { mutableStateOf(3) }
+fun QuantitySelector(
+    quantity: Int,
+    onIncreaseQuantity: () -> Unit,
+    onDecreaseQuantity: () -> Unit) {
+
 
     Row(
         modifier = Modifier
@@ -310,7 +335,7 @@ fun QuantitySelector() {
         Row(verticalAlignment = Alignment.CenterVertically) {
 
             IconButton(
-                onClick = { if (quantity > 1) quantity-- }
+                onClick = { if (quantity > 1) onDecreaseQuantity() }
             ) {
                 Icon(Icons.Default.Remove,
                     contentDescription = null,
@@ -326,7 +351,7 @@ fun QuantitySelector() {
             )
 
             IconButton(
-                onClick = { quantity++ },
+                onClick = { onIncreaseQuantity()},
 
 
             ) {
@@ -341,7 +366,11 @@ fun QuantitySelector() {
 }
 
 @Composable
-fun OrderSummaryCard() {
+fun OrderSummaryCard(cartItems: List<CartItem>) {
+
+    val subTotal = cartItems.sumOf {
+        it.foodItem.price*it.quantity
+    }
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -360,14 +389,15 @@ fun OrderSummaryCard() {
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            SummaryRow("Subtotal (1 items)", "₹360",MaterialTheme.colorScheme.onSurface)
+            SummaryRow("Subtotal (${cartItems.size}) items", "₹$subTotal")
+
             SummaryRow("Service Fee", "Free", Color(0xFF2ECC71))
 
             Divider(modifier = Modifier.padding(vertical = 12.dp))
 
             SummaryRow(
                 "Total",
-                "₹360",
+                "₹ $subTotal",
                 Color(0xFFFF7A00),
                 isBold = true
             )

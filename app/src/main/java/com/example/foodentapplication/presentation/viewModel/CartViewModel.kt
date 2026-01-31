@@ -36,6 +36,18 @@ class CartViewModel @Inject constructor(
         }
     }
 
+    fun increaseQuantity(foodId:String) {
+         viewModelScope.launch {
+             cartRepo.increaseQuantity(foodId)
+         }
+    }
+
+    fun decreaseQuantity(foodId:String){
+        viewModelScope.launch {
+            cartRepo.decreaseQuantity(foodId)
+        }
+    }
+
     fun removeItem(foodId:String){
         viewModelScope.launch {
             cartRepo.removeFromCart(foodId)

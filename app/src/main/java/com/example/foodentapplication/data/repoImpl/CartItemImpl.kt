@@ -43,4 +43,45 @@ constructor() : CartRepo{
         cartItems.value = emptyList()
         return ResultState.Success("Cart cleared")
     }
+
+    override suspend fun increaseQuantity(foodId: String): ResultState<String> {
+        val current = cartItems.value.toMutableList()
+
+        val index = current.indexOfFirst {
+            it.foodItem.id == foodId
+
+        }
+
+        if(index >= 0) {
+            val item = current[index]
+            current[index] = item.copy(quantity = item.quantity + 1)
+            cartItems.value = current
+            return ResultState.Success("Quantity increased")
+        }
+          else {
+            return ResultState.Error("Food Item not found")
+        }
+    }
+
+    override suspend fun decreaseQuantity(foodId: String): ResultState<String> {
+        val current = cartItems.value.toMutableList()
+        val index = current.indexOfFirst {
+            it.foodItem.id == foodId
+        }
+        if(index >= 0) {
+            val item = current[index]
+            if(item.quantity > 1) {
+                current[index] = item.copy(quantity = item.quantity - 1)
+            }
+            else{
+                current.removeAt(index)
+            }
+            cartItems.value = current
+            return ResultState.Success("Quantity decreased")
+        }else{
+            return ResultState.Error("Food Item not found")
+
+        }
+
+    }
 }

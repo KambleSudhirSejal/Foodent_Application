@@ -14,4 +14,11 @@ interface CartRepo {
     suspend fun removeFromCart(foodId:String): ResultState<String>
 
     suspend fun clearCart(): ResultState<String>
+
+    suspend fun increaseQuantity(foodId: String): ResultState<String>
+
+    suspend fun decreaseQuantity(foodId: String): ResultState<String>
+
+
+
 }
